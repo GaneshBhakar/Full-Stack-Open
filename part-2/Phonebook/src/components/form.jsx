@@ -1,10 +1,10 @@
-const Form = (props) => {
+const Form = ({ addPerson, newName, handleNameChange, newNumber, setNewNumber } ) => {
 	return (
-		<form onSubmit={props.addPerson}>
+		<form onSubmit={addPerson}>
         <div>
-          name: <input value={props.newName} onChange={props.handleNameChange}/>
+          name: <input value={newName} onChange={handleNameChange}/>
         </div>
-        <div>number: <input value={props.newNumber} onChange={(event) => props.setNewNumber(event.target.value)}/></div>
+        <div>number: <input value={newNumber} onChange={(event) => setNewNumber(event.target.value)}/></div>
         <div>
           <button type="submit">add</button>
         </div>
