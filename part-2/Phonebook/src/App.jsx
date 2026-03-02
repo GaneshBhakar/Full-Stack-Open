@@ -6,7 +6,6 @@ import Persons from './components/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
@@ -40,12 +39,12 @@ const App = () => {
     }
 
     axios
-      .post('http://localhost:3001/persons')
-      .then(response =>
+      .post('http://localhost:3001/persons', personObject)
+      .then(response =>{
         setPersons(persons.concat(response.data)),
         setNewName(''),
         setNewNumber('')
-      )
+      })
   }
 
   const handleNameChange = (event) => {
