@@ -30,6 +30,5 @@
       "name": "hi",
       "number": "378233e32"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
