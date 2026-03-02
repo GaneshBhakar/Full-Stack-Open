@@ -19,16 +19,7 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
-    },
-    {
-      "id": "2a21",
-      "name": "ganesh",
-      "number": "239848237t"
-    },
-    {
-      "id": "8311",
-      "name": "hi",
-      "number": "378233e32"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

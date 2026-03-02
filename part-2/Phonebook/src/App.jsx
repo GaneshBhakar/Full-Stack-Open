@@ -65,7 +65,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={persons} search={search} />
+      <Persons persons={persons} search={search} setPersons={setPersons}/>
     </div>
   )
 }

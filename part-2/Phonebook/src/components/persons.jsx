@@ -1,4 +1,15 @@
-const Persons = ({ persons, search }) => {
+import phoneServices from "./../services/phone"
+
+const Persons = ({ persons, search, setPersons }) => {
+	const handleClick = (person) => {
+		let ans = window.confirm(`Delete ${person.name}`)
+		if(ans){
+			phoneServices.del(person.id).then(() => {
+				setPersons(persons.filter(p => p.id !== person.id))
+			})
+		}
+	}
+
 	return (
 		<>
 			{persons
@@ -6,7 +17,9 @@ const Persons = ({ persons, search }) => {
 				person.name.toLowerCase().includes(search.toLowerCase())
 			)
 			.map(person => 
-				<div key={person.name}>{person.name} {person.number}</div>
+				<div key={person.name}>{person.name} {person.number}
+				<button onClick={() => handleClick(person)}>delete</button>
+				</div>
 			)}
 		</>
 	)
