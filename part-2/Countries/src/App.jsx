@@ -1,6 +1,7 @@
 import { useState, useEffect}  from 'react'
 import countryServices from './services/countries'
 import Filter from './components/filter'
+import Countries from './components/Countries'
 
 const App = () => {
   const [searched, setSearched] = useState('')
@@ -17,7 +18,7 @@ const App = () => {
   )
 
   return (
-    <div>find countries 
+    <div>
       <Filter value={searched} onChange={(e) => setSearched(e.target.value)} />
       <Countries countries={derived} />
     </div>

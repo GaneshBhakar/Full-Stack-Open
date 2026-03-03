@@ -1,5 +1,3 @@
-
-
 const Filter = ({ value, onChange }) => {
 	return (
 		<div>
