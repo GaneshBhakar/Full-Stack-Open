@@ -3,6 +3,7 @@ import countryServices from './services/countries'
 import Filter from './components/filter'
 import Countries from './components/Countries'
 
+
 const App = () => {
   const [searched, setSearched] = useState('')
   const [data, setData] = useState([])
@@ -20,7 +21,7 @@ const App = () => {
   return (
     <div>
       <Filter value={searched} onChange={(e) => setSearched(e.target.value)} />
-      <Countries countries={derived} />
+      <Countries countries={derived} setSearched={setSearched} />
     </div>
   )
 }
