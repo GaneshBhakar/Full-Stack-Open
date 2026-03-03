@@ -3,12 +3,15 @@ import phoneServices from './services/phone'
 import Filter from './components/filter'
 import Form from './components/form'
 import Persons from './components/persons'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -45,17 +48,35 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           })
+          .then(() => {
+            setNotification({ message: `Updated ${existingPerson.name}`, type: 'success' })
+            setTimeout(() => setNotification(null), 5000)
+          })
+          .catch(() => {
+            setNotification({
+              message: `Information of ${existingPerson.name} has already been removed from server`,
+              type: 'error'
+            })
+            setTimeout(() => setNotification(null), 5000)
+            setPersons(prev =>
+              prev.filter(p => p.id !== existingPerson.id)
+            )
+          })
       }
-      else{
+    }
+    else{
         phoneServices
         .create(personObject)
         .then(initialResponse =>{
-          setPersons(persons.concat(initialResponse)),
+          setPersons(persons.concat(initialResponse))
           setNewName('')
           setNewNumber('')
         })
+        .then(() => {
+          setNotification({ message: `Added ${personObject.name}`, type: 'success' })
+          setTimeout(() => setNotification(null), 5000)
+      })
       }
-    }
   }
 
   const handleNameChange = (event) => {
@@ -65,6 +86,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification?.message} type={notification?.type} />
       <Filter search={search} setSearch={setSearch}/>
 
       <h2>add a new</h2>
