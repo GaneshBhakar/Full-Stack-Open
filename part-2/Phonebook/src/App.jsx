@@ -23,27 +23,39 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    const nameExists = persons.some(
-    person => person.name.toLowerCase() === newName.toLowerCase()
-  )
-
-  if(nameExists){
-    alert(`${newName} is already added to phoebook`)
-    return
-  }
+    const existingPerson = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
 
     const personObject = {
       name: newName,
       number: newNumber,
     }
 
-    phoneServices
-      .create(personObject)
-      .then(initialResponse =>{
-        setPersons(persons.concat(initialResponse)),
-        setNewName(''),
-        setNewNumber('')
-      })
+    if(existingPerson){
+      const confirmUpdate = window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`)
+
+      if(confirmUpdate){
+        phoneServices
+          .update(existingPerson.id, personObject)
+          .then(updatedPerson => {
+            setPersons(prev =>
+            prev.map(p =>
+              p.id !== existingPerson.id ? p : updatedPerson
+            )
+          )
+          setNewName('')
+          setNewNumber('')
+          })
+      }
+      else{
+        phoneServices
+        .create(personObject)
+        .then(initialResponse =>{
+          setPersons(persons.concat(initialResponse)),
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+    }
   }
 
   const handleNameChange = (event) => {
