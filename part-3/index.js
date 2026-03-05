@@ -1,5 +1,6 @@
 const express = require('express')
 var morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 app.use(express.json())
@@ -8,6 +9,7 @@ morgan.token('body', (req) => {
 })
 // app.use(morgan('tiny'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(cors())
 
 let persons = [
     { 
@@ -82,7 +84,7 @@ app.post('/api/persons', (request, response) => {
 	const person = {
 		id: generateId().toString(),
 		name: body.name,
-		number: body.important || false,
+		number: body.number || false,
 	}
 
 	persons = persons.concat(person)
