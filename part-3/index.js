@@ -39,32 +39,62 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
+	// response.json(persons)
 	Person.find({}).then(persons => {
 		response.json(persons)
 	})
 })
 
 app.get('/info', (request, response) => {
-	const requestTime = new Date()
-	response.send(`Phonebook has info for ${persons.length} people <br> ${requestTime}`)
+	// const requestTime = new Date()
+	// response.send(`Phonebook has info for ${persons.length} people <br> ${requestTime}`)
+	Person.countDocuments({})
+		.then(count => {
+			const requestTime = new Date()
+			response.send(`Phonebook has info for ${count} people <br> ${requestTime}`)
+		})
 })
 
-// app.get('/api/persons/:id', (request, response) => {
-// 	const id = request.params.id
-// 	const person = persons.find(person => person.id === id)
+app.get('/api/persons/:id', (request, response) => {
+	// const id = request.params.id
+	// const person = persons.find(person => person.id === id)
 
-// 	if(person){
-// 		response.json(person)
-// 	}else{
-// 		response.status(404).end()
-// 	}
-// })
+	// if(person){
+	// 	response.json(person)
+	// }else{
+	// 	response.status(404).end()
+	// }
+
+	Person.findById(request.params.id)
+		.then(person => {
+			if(person){
+				response.json(person)
+			} else{
+				response.status(404).end()
+			}
+		})
+		.catch(error => {
+			response.status(404).send({ error: 'malformatted id' })
+		})
+})
 
 app.delete('/api/persons/:id', (request, response) => {
-	const id = request.params.id
-	persons = persons.filter(person => person.id !== id)
+	// const id = request.params.id
+	// persons = persons.filter(person => person.id !== id)
 
-	response.status(204).end()
+	// response.status(204).end()
+
+	Person.findByIdAndDelete(request.params.id)
+		.then(response => {
+			if(result){
+				response.status(204).end()
+			}else{
+				 response.status(404).end()
+			}
+		})
+		.catch(error => {
+			response.status(400).send({ error: 'malformatted id' })
+		})
 })
 
 const generateId = () => {
@@ -86,16 +116,24 @@ app.post('/api/persons', (request, response) => {
       	error: 'name must be unique'
     })
 	}
+	// const person = {
+	// 	id: generateId().toString(),
+	// 	name: body.name,
+	// 	number: body.number || false,
+	// }
+	// persons = persons.concat(person)
+  	// response.json(person)
 
-	const person = {
+	const person = new Person({
 		id: generateId().toString(),
 		name: body.name,
 		number: body.number || false,
-	}
+	})
 
-	persons = persons.concat(person)
-
-	response.json(person)
+	person.save()
+		.then(savedPerson => {
+			response.json(savedPerson)
+		})
 })
 
 // const PORT = process.env.PORT || 3001
