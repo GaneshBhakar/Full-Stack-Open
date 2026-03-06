@@ -1,6 +1,3 @@
-// password = 818Ha7rrHJdod2y6
-// pass = 1BeCn3f3YuzIFyr4
-
 const mongoose = require('mongoose')
 
 if(process.argv.length < 3){
@@ -48,3 +45,5 @@ if(process.argv.length === 5){
 		mongoose.connection.close()
 	})
 }
+
+// XZnQ3ZfCLbWy9B81
