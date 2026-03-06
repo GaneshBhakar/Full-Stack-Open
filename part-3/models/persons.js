@@ -1,0 +1,28 @@
+const mongoose = require('mongoose')
+
+mongoose.set('strictQuery', false)
+
+const url = process.env.MONGODB_URI
+
+console.log('connecting to ', url)
+
+mongoose.connect(url, { family: 4 })
+	.then(() => {
+		console.log("connected to mongo")
+	})
+	.catch((error) => {
+		console.log("error connecting to mongo ", error.message)
+	})
+
+const personSchema = new mongoose.Schema({
+	name: String,
+	number: String
+})
+
+// personSchema.set('toJSON', {
+// 	transform: (document, returnedObject) => {
+// 		returnedObject.id = 
+// 	}
+// })
+
+module.exports = mongoose.model('Person', personSchema)
