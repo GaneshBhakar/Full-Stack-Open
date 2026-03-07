@@ -5,7 +5,7 @@ const Persons = ({ persons, search, setPersons }) => {
 		let ans = window.confirm(`Delete ${person.name}`)
 		if(ans){
 			phoneServices.del(person.id).then(() => {
-				setPersons(persons.filter(p => p.id !== person.id))
+				setPersons(prev => prev.filter(p => p.id !== person.id))
 			})
 		}
 	}
