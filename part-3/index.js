@@ -104,7 +104,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 	// response.status(204).end()
 
 	Person.findByIdAndDelete(request.params.id)
-		.then(response => {
+		.then(result => {
 			if(result){
 				response.status(204).end()
 			}else{
