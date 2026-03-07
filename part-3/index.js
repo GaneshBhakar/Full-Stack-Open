@@ -118,7 +118,7 @@ const generateId = () => {
 	return Math.floor(Math.random() * 1000000000)
 }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
 	const body = request.body
 	 
 	if(!body.name || !body.number){
@@ -151,6 +151,7 @@ app.post('/api/persons', (request, response) => {
 		.then(savedPerson => {
 			response.json(savedPerson)
 		})
+		.catch(error => next(error))
 })
 
 // const PORT = process.env.PORT || 3001
@@ -162,6 +163,8 @@ const errorHandler = (error, request, response, next) => {
 	console.log(error)
 	if(error.name === 'CastError'){
 		return response.status(400).send({ error: 'malformatted id' })
+	} else if(error.name === 'ValidationError'){
+		return response.status(400).json({ error: error.message})
 	}
 	next(error)
 }
