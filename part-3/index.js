@@ -55,7 +55,7 @@ app.get('/info', (request, response) => {
 		})
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
 	// const id = request.params.id
 	// const person = persons.find(person => person.id === id)
 
@@ -73,12 +73,10 @@ app.get('/api/persons/:id', (request, response) => {
 				response.status(404).end()
 			}
 		})
-		.catch(error => {
-			response.status(404).send({ error: 'malformatted id' })
-		})
+		.catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
 	// const id = request.params.id
 	// persons = persons.filter(person => person.id !== id)
 
@@ -92,9 +90,7 @@ app.delete('/api/persons/:id', (request, response) => {
 				 response.status(404).end()
 			}
 		})
-		.catch(error => {
-			response.status(400).send({ error: 'malformatted id' })
-		})
+		.catch(error => next(error))
 })
 
 const generateId = () => {
@@ -110,12 +106,12 @@ app.post('/api/persons', (request, response) => {
 		})
 	}
 
-	const nameExists = persons.find(person => person.name === body.name)
-	if(nameExists){
-		return response.status(400).json({
-      	error: 'name must be unique'
-    })
-	}
+	// const nameExists = persons.find(person => person.name === body.name)
+	// if(nameExists){
+	// 	return response.status(400).json({
+    //   	error: 'name must be unique'
+    // })
+	// }
 	// const person = {
 	// 	id: generateId().toString(),
 	// 	name: body.name,
@@ -140,3 +136,13 @@ app.post('/api/persons', (request, response) => {
 app.listen(PORT, () => {
 	console.log(`Server running on PORT ${PORT}`)
 })
+
+const errorHandler = (error, request, response, next) => {
+	console.log(error)
+	if(error.name === 'CastError'){
+		return response.status(400).send({ error: 'malformatted id' })
+	}
+	next(error)
+}
+
+app.use(errorHandler)
