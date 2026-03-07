@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // const baseUrl = 'http://localhost:3001/persons'
 // const baseUrl = '/api/persons'     //via proxy method
-const baseUrl = 'http://localhost:3001/api/persons'
+const baseUrl = 'http://localhost:3001/api/persons'   //via cors
 
 const create = newObject => {
   const request = axios.post(baseUrl, newObject)

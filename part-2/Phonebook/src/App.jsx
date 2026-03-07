@@ -47,16 +47,28 @@ const App = () => {
           )
           setNewName('')
           setNewNumber('')
+
+          setNotification({ message: `Updated ${existingPerson.name}`, type: 'success' })
+          setTimeout(() => setNotification(null), 5000)
           })
-          .then(() => {
-            setNotification({ message: `Updated ${existingPerson.name}`, type: 'success' })
-            setTimeout(() => setNotification(null), 5000)
-          })
-          .catch(() => {
-            setNotification({
-              message: `Information of ${existingPerson.name} has already been removed from server`,
-              type: 'error'
-            })
+          .catch(error => {
+            if (error.response && error.response.data.error) {
+              // validation error from backend
+              setNotification({
+                message: error.response.data.error,
+                type: 'error'
+              })
+            } else {
+              // person deleted from server
+              setNotification({
+                message: `Information of ${existingPerson.name} has already been removed from server`,
+                type: 'error'
+              })
+
+              setPersons(prev =>
+                prev.filter(p => p.id !== existingPerson.id)
+              )
+            }
             setTimeout(() => setNotification(null), 5000)
             setPersons(prev =>
               prev.filter(p => p.id !== existingPerson.id)
@@ -71,11 +83,17 @@ const App = () => {
           setPersons(persons.concat(initialResponse))
           setNewName('')
           setNewNumber('')
-        })
-        .then(() => {
+
           setNotification({ message: `Added ${personObject.name}`, type: 'success' })
           setTimeout(() => setNotification(null), 5000)
-      })
+        })
+        .catch(error => {
+          setNotification({ message: error.response.data.error, type: 'error' })
+
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
       }
   }
 
